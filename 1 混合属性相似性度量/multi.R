@@ -1,4 +1,4 @@
-data<-read.csv("E:\\Rlanguage\\1 混合属性相似性度量\\stat.csv")
+data<-read.csv("stat.csv") 
 
 mul<-function(data){
   
