@@ -1,4 +1,4 @@
-  #数据来源网络
+  #dataset
   x1 <- seq(0,pi,length.out=100)
   y1 <- sin(x1) + 0.1*rnorm(100)
   x2 <- 1.5+ seq(0,pi,length.out=100)
@@ -78,4 +78,3 @@
   }
   
   pic(data,0.42,5)
-  
