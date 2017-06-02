@@ -1,4 +1,4 @@
-#Êı¾İÀ´Ô´ÍøÂç
+#dataset
 x1 <- seq(0,pi,length.out=100)
 y1 <- sin(x1) + 0.1*rnorm(100)
 x2 <- 1.5+ seq(0,pi,length.out=100)
@@ -6,17 +6,17 @@ y2 <- cos(x2) + 0.1*rnorm(100)
 data <- data.frame(c(x1,x2),c(y1,y2))
 names(data) <- c('x','y')
 
-#ÕÒ³ö¶ÔÓ¦Àà
+#æ‰¾å‡ºå¯¹åº”ç±»
 k_means<-function(data,k){
-  n<-nrow(data) #n¸öÊı¾İ
-  init<-sample(n,size=k) #Ëæ»ú³éÑùk¸öÊı¾İ×÷Îª³õÊ¼´ØÖĞĞÄ
-  center<-data[init,] #´ØÖĞĞÄµÄ¾ØÕó
+  n<-nrow(data) #nä¸ªæ•°æ®
+  init<-sample(n,size=k) #éšæœºæŠ½æ ·kä¸ªæ•°æ®ä½œä¸ºåˆå§‹ç°‡ä¸­å¿ƒ
+  center<-data[init,] #ç°‡ä¸­å¿ƒçš„çŸ©é˜µ
   class<-rep(0,time=n)
   temp<-c(length=k)
   pd<-TRUE
   
   while(pd==TRUE){
-    #¼ÆËãËùÓĞÊı¾İµ½¸÷¸ö´ØÖĞĞÄµÄ¾àÀë²¢·ÖÅä´Ø
+    #è®¡ç®—æ‰€æœ‰æ•°æ®åˆ°å„ä¸ªç°‡ä¸­å¿ƒçš„è·ç¦»å¹¶åˆ†é…ç°‡
     for(p in 1:n){
       for(q in 1:k){
         temp[q]<-sqrt((data[p,1]-data[q,1])^2+(data[p,2]-data[q,2])^2)
@@ -24,7 +24,7 @@ k_means<-function(data,k){
       class[p]<-which(temp==min(temp))
     }
     
-    #¸üĞÂ´ØÖĞĞÄ
+    #æ›´æ–°ç°‡ä¸­å¿ƒ
     center1<-matrix(numeric(0),nrow=0,ncol=k)
     for(j in 1:k){
       p<-which(class==j)
@@ -32,13 +32,13 @@ k_means<-function(data,k){
       center1<-rbind(center1,c)
     }
     
-    #ÅĞ¶ÏÍ£Ö¹Ìõ¼ş
+    #åˆ¤æ–­åœæ­¢æ¡ä»¶
     ifelse(identical(center1,center),pd<-FALSE,center<-center1)
   }
   return(class)
 }
 
-#»­Í¼
+#ç”»å›¾
 pic<-function(data,k){
   center<-k_means(data,k)
   result<-cbind(data,center)
