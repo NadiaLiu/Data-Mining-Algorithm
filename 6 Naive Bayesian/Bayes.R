@@ -1,4 +1,4 @@
-D<-read.csv("E:\\Rlanguage\\6 Naive Bayesian\\tree.csv")
+D<-read.csv("tree.csv")
 colnames(D)<-c("age","income","student","credit_rating","buys_computer")
 
 Bayes<-function(p){
