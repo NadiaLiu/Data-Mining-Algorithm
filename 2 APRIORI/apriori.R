@@ -124,7 +124,6 @@ apriori<-function(D,min_sup){
     }
   }
   return(L)
-  
 }
 
 apriori(D,min_sup)
