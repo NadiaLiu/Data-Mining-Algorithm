@@ -97,9 +97,3 @@ colnames(D)<-c("age","income","student","credit_rating","buys_computer")
     
   p<-list(age="youth",income="low",student="yes",credit_rating="exllent")
   predict(p)
-    
-    
-    
-  
-
-  
