@@ -1,4 +1,4 @@
-D<-read.csv("E:\\Rlanguage\\3 决策树\\tree.csv")
+D<-read.csv("tree.csv")
 colnames(D)<-c("age","income","student","credit_rating","buys_computer")
 
   #求最大增益的属性那一列
