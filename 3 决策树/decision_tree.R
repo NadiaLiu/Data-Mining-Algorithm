@@ -1,6 +1,3 @@
-D<-read.csv("tree.csv")
-colnames(D)<-c("age","income","student","credit_rating","buys_computer")
-
   #求最大增益的属性那一列
   attribute<-function(D){
   #计算Info(D)
@@ -40,11 +37,6 @@ colnames(D)<-c("age","income","student","credit_rating","buys_computer")
   }
 
   #创建决策树
-  tree<-data.frame(age=0,income=0,student=0, credit_rating=0, buys_computer=0)
-  tree<-tree[-1,]
-  t<-1
-  a=attribute(D)
-  
   create_tree<-function(a,D)
   {
     class<-as.character(unique(D[,a]))
@@ -74,10 +66,9 @@ colnames(D)<-c("age","income","student","credit_rating","buys_computer")
         create_tree(a_new,data)
       }
     }
+    return(tree)
   }
-  
-  create_tree(a,D)
-  
+
   #预测
     predict<-function(p){
       count=0
@@ -94,6 +85,16 @@ colnames(D)<-c("age","income","student","credit_rating","buys_computer")
         }
       }
     }
+  
+    
+  #main function  
+  D<-read.csv("tree.csv")
+  colnames(D)<-c("age","income","student","credit_rating","buys_computer")
+  tree<-data.frame(age=0,income=0,student=0, credit_rating=0, buys_computer=0)
+  tree<-tree[-1,]
+  t<-1
+  a<-attribute(D)
+  create_tree(a,D)
     
   p<-list(age="youth",income="low",student="yes",credit_rating="exllent")
   predict(p)
