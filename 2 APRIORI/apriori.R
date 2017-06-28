@@ -1,14 +1,3 @@
-D<-list(T100=c("I1","I2","I5"),
-        T200=c("I2","I4"),
-        T300=c("I2","I3"),
-        T400=c("I1","I2","I4"),
-        T500=c("I1","I3"),
-        T600=c("I2","I3"),
-        T700=c("I1","I3"),
-        T800=c("I1","I2","I3","I5"),
-        T900=c("I1","I2","I3"))
-min_sup=2
-
 apriori<-function(D,min_sup){
   
   items<-list("I1","I2","I3","I4","I5")
@@ -64,7 +53,7 @@ apriori<-function(D,min_sup){
   
   #支持度判断找出1-频繁项集
   L1<-C1[which(support>=min_sup),]
-  L<-list(L,L1)
+  L[[1]]<-L1
   
   #2-候选项集
   b<-L1[,1]
@@ -85,7 +74,7 @@ apriori<-function(D,min_sup){
   C2<-rbind(C2,support)
   L2<-C2[,which(support>=min_sup)]
   L2<-t(L2)
-  L<-list(L,L2)
+  L[[2]]<-L2
   
   
   Lk<-L2
@@ -99,7 +88,8 @@ apriori<-function(D,min_sup){
     sub<-subset(Ck)
     del<-sub_fre(sub,b)
     Ck<-Ck[,-del]
-    if(ncol(Ck)==0)
+    Ck<-as.matrix(Ck)
+    if(length(Ck)==0)
     {pd==FALSE
       break}
     #计算支持度
@@ -119,11 +109,66 @@ apriori<-function(D,min_sup){
     Ck<-rbind(Ck,support)
     Lk<-Ck[,which(support>=min_sup)]
     Lk<-t(Lk)
-    L<-list(L,Lk)
+    if(nrow(Lk)==0)
+    {pd==FALSE
+      break}
+    L[[K]]<-Lk
     K<-K+1
     }
   }
-  return(L)
+  
+  #把频繁项集变成数据框格式
+  freitems<-data.frame(items=0,support=0)
+  freitems<-freitems[-1,]
+  k=0
+  for(i in 1:length(L)){
+    for(j in 1:nrow(L[[i]])){
+      k<-k+1
+      freitems[k,1]=paste(unlist(L[[i]][j,1:(ncol(L[[i]])-1)]),collapse = ",")
+      freitems[k,2]=unlist(L[[i]][j,ncol(L[[i]])])
+    }
+  }
+  return(freitems)
 }
 
-apriori(D,min_sup)
+#产生关联规则
+rules<-function(L,con){
+  rule<-data.frame(item=0,result=0,confidence=0)
+  rule<-rule[-1,]
+  k<-0
+  for(i in 1:nrow(L)){
+    if(length(unlist(strsplit(as.character(L[i,1]),",")))==1) next
+    #从频繁2项集开始找规则
+    fre<-unlist(strsplit(as.character(L[i,1]),","))
+    nume<-as.numeric(L[i,2])
+    for(j in 1:(length(fre)-1)){
+      sub<-combn(fre,j)
+      for(p in 1:ncol(sub)){
+        sub1<-paste(sub[,p],collapse = ",")
+        k<-k+1
+        rule[k,1]<-sub1
+        deno<-as.numeric(L[which(sub1==L[,1]),2])
+        rest<-setdiff(fre,sub[,p]) #setdiff好厉害
+        rest<-paste(rest,collapse = ",") #paste和strsplit搭配太酷了
+        rule[k,2]<-rest
+        rule[k,3]<-nume/deno
+      }
+    }
+  }
+  rule<-rule[which(rule[,3]>=con),]
+  return(rule)
+}
+
+
+#main function
+D<-list(T100=c("I1","I2","I5"),
+        T200=c("I2","I4"),
+        T300=c("I2","I3"),
+        T400=c("I1","I2","I4"),
+        T500=c("I1","I3"),
+        T600=c("I2","I3"),
+        T700=c("I1","I3"),
+        T800=c("I1","I2","I3","I5"),
+        T900=c("I1","I2","I3"))
+L<-apriori(D,2)
+rules(L,0.6)
