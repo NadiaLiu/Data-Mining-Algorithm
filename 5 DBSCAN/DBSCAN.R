@@ -1,11 +1,3 @@
-  #dataset
-  x1 <- seq(0,pi,length.out=100)
-  y1 <- sin(x1) + 0.1*rnorm(100)
-  x2 <- 1.5+ seq(0,pi,length.out=100)
-  y2 <- cos(x2) + 0.1*rnorm(100)
-  data <- data.frame(c(x1,x2),c(y1,y2))
-  names(data) <- c('x','y')
-  
   #直接输出矩阵的话不好判断循环几次，DB函数输出类别class
   DB<-function(D,e,MinPts){
     n<-nrow(D)
@@ -74,7 +66,15 @@
     result$class<-as.factor(result$class)
     p<-ggplot(data = result, mapping = aes(x = x, y = y,colour=factor(class)))
     p + geom_point()
-    
   }
   
+  
+  #main function
+  x1 <- seq(0,pi,length.out=100)
+  y1 <- sin(x1) + 0.1*rnorm(100)
+  x2 <- 1.5+ seq(0,pi,length.out=100)
+  y2 <- cos(x2) + 0.1*rnorm(100)
+  data <- data.frame(c(x1,x2),c(y1,y2))
+  names(data) <- c('x','y')
   pic(data,0.42,5)
+  
